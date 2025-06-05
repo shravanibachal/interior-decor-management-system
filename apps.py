@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class BreakroomConfig(AppConfig):
+class CabinConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'breakroom'
+    name = 'Cabin'
