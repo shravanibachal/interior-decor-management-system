@@ -1,16 +1,10 @@
+# models.py
 from django.db import models
 
-# Create your models here.
-class Conference_Img1(models.Model):
-    conference_img1= models.ImageField(upload_to="photos/", blank=True,null=True)
+class Feedback(models.Model):
+    email = models.EmailField()
+    rating = models.PositiveSmallIntegerField()  # 1 to 5 for star rating
+    message = models.TextField()
 
-class Conference_Img2(models.Model):
-    conference_img2= models.ImageField(upload_to="photos/", blank=True,null=True)
-
-
-class Conference_Img3(models.Model):
-    conference_img3= models.ImageField(upload_to="photos/", blank=True,null=True)
-
-class Conference_Img4(models.Model):
-    conference_img4= models.ImageField(upload_to="photos/", blank=True,null=True)
-
+    def __str__(self):
+        return f"Feedback from {self.email} - Rating: {self.rating}"
