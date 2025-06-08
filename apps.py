@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CommercialConfig(AppConfig):
+class ConferenceConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'commercial'
+    name = 'conference'
