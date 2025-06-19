@@ -1,38 +1,41 @@
 from django.contrib import admin
+from .models import ReachoutForm, Picture
 from django.utils.html import format_html
-from .models import ProjectSubmission, UploadedImage
 
-class UploadedImageInline(admin.TabularInline):
-    model = UploadedImage
-    extra = 1  # Allows adding extra image fields
+class PictureInline(admin.TabularInline):
+    model = Picture
+    extra = 1
+    readonly_fields = ['display_image']
 
-class ProjectSubmissionAdmin(admin.ModelAdmin):
-    list_display = (
-        'first_name', 
-        'last_name', 
-        'email', 
-        'phone', 
-        'payment_mode', 
-        'total_cost', 
-        'display_selected_spaces', 
-        'display_selected_services', 
-        'display_uploaded_images'
-    )
-    inlines = [UploadedImageInline]
+    def display_image(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="150" height="150" />', obj.image.url)
+        return "No image available"
 
-    def display_selected_spaces(self, obj):
-        return obj.selected_spaces.replace(',', ', ') if obj.selected_spaces else "None"
-    display_selected_spaces.short_description = 'Selected Spaces'
+    display_image.short_description = "Uploaded Image"
 
-    def display_selected_services(self, obj):
-        return obj.selected_services.replace(',', ', ') if obj.selected_services else "None"
-    display_selected_services.short_description = 'Selected Services'
+class ReachoutFormAdmin(admin.ModelAdmin):
+    list_display = ['first_name', 'last_name', 'email', 'phone', 'spaces', 'services', 'total_cost', 'payment_mode']
+    inlines = [PictureInline]
 
-    def display_uploaded_images(self, obj):
-        images_html = ''
-        for img in obj.uploaded_images.all():
-            images_html += format_html('<img src="{}" style="width: 150px; height: auto; margin-right: 10px;" />', img.image.url)
-        return format_html(images_html) if images_html else "No Images"
-    display_uploaded_images.short_description = 'Uploaded Images'
+    def spaces(self, obj):
+        return obj.spaces
 
-admin.site.register(ProjectSubmission, ProjectSubmissionAdmin)
+    def services(self, obj):
+        return obj.services
+
+# Register ReachoutForm model
+admin.site.register(ReachoutForm, ReachoutFormAdmin)
+
+# Register Picture model separately
+class PictureAdmin(admin.ModelAdmin):
+    list_display = ['reachout_form', 'image_display']
+
+    def image_display(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="150" height="150" />', obj.image.url)
+        return "No image available"
+
+    image_display.short_description = "Uploaded Image"
+
+admin.site.register(Picture, PictureAdmin)

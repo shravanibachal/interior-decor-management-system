@@ -1,21 +1,21 @@
 from django.db import models
 
-class ProjectSubmission(models.Model):
+class ReachoutForm(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=15)
+    spaces = models.TextField()  # Storing multiple spaces as comma-separated values
+    services = models.TextField()  # Storing multiple services as comma-separated values
+    total_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     payment_mode = models.CharField(max_length=50)
-    total_cost = models.DecimalField(max_digits=10, decimal_places=2)
-    selected_spaces = models.TextField()  # Should contain space names
-    selected_services = models.TextField()  # Should contain service names
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} - {self.email}"
+        return f"{self.first_name} {self.last_name}"
 
-class UploadedImage(models.Model):
-    project_submission = models.ForeignKey(ProjectSubmission, related_name='uploaded_images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='uploads/')
+class Picture(models.Model):
+    reachout_form = models.ForeignKey(ReachoutForm, related_name='pictures', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='pictures/')  # Path for the image upload
 
     def __str__(self):
-        return f"Image for {self.project_submission.first_name} {self.project_submission.last_name} - {self.image.name}"
+        return f"Image for {self.reachout_form.first_name} {self.reachout_form.last_name}"
