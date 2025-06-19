@@ -1,11 +1,38 @@
 from django.contrib import admin
-from livingroom.models import Livingroom_Img1,Livingroom_Img2,Livingroom_Img3,Livingroom_Img4,Livingroom_Img5,Livingroom_Img6,Livingroom_Img7
+from django.utils.html import format_html
+from .models import ProjectSubmission, UploadedImage
 
-# Register your models here.
-admin.site.register(Livingroom_Img1)
-admin.site.register(Livingroom_Img2)
-admin.site.register(Livingroom_Img3)
-admin.site.register(Livingroom_Img4)
-admin.site.register(Livingroom_Img5)
-admin.site.register(Livingroom_Img6)
-admin.site.register(Livingroom_Img7)
+class UploadedImageInline(admin.TabularInline):
+    model = UploadedImage
+    extra = 1  # Allows adding extra image fields
+
+class ProjectSubmissionAdmin(admin.ModelAdmin):
+    list_display = (
+        'first_name', 
+        'last_name', 
+        'email', 
+        'phone', 
+        'payment_mode', 
+        'total_cost', 
+        'display_selected_spaces', 
+        'display_selected_services', 
+        'display_uploaded_images'
+    )
+    inlines = [UploadedImageInline]
+
+    def display_selected_spaces(self, obj):
+        return obj.selected_spaces.replace(',', ', ') if obj.selected_spaces else "None"
+    display_selected_spaces.short_description = 'Selected Spaces'
+
+    def display_selected_services(self, obj):
+        return obj.selected_services.replace(',', ', ') if obj.selected_services else "None"
+    display_selected_services.short_description = 'Selected Services'
+
+    def display_uploaded_images(self, obj):
+        images_html = ''
+        for img in obj.uploaded_images.all():
+            images_html += format_html('<img src="{}" style="width: 150px; height: auto; margin-right: 10px;" />', img.image.url)
+        return format_html(images_html) if images_html else "No Images"
+    display_uploaded_images.short_description = 'Uploaded Images'
+
+admin.site.register(ProjectSubmission, ProjectSubmissionAdmin)

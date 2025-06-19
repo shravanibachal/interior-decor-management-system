@@ -1,23 +1,21 @@
 from django.db import models
 
-# Create your models here.
-class Livingroom_Img1(models.Model):
-    livingroom_img1= models.ImageField(upload_to="photos/", blank=True,null=True)
+class ProjectSubmission(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    payment_mode = models.CharField(max_length=50)
+    total_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    selected_spaces = models.TextField()  # Should contain space names
+    selected_services = models.TextField()  # Should contain service names
 
-class Livingroom_Img2(models.Model):
-     livingroom_img2= models.ImageField(upload_to="photos/", blank=True,null=True)
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.email}"
 
-class Livingroom_Img3(models.Model):
-     livingroom_img3= models.ImageField(upload_to="photos/", blank=True,null=True)
+class UploadedImage(models.Model):
+    project_submission = models.ForeignKey(ProjectSubmission, related_name='uploaded_images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='uploads/')
 
-class Livingroom_Img4(models.Model):
-     livingroom_img4= models.ImageField(upload_to="photos/", blank=True,null=True)
-
-class Livingroom_Img5(models.Model):
-     livingroom_img5= models.ImageField(upload_to="photos/", blank=True,null=True)
-
-class Livingroom_Img6(models.Model):
-     livingroom_img6= models.ImageField(upload_to="photos/", blank=True,null=True)
-
-class Livingroom_Img7(models.Model):
-     livingroom_img7= models.ImageField(upload_to="photos/", blank=True,null=True)
+    def __str__(self):
+        return f"Image for {self.project_submission.first_name} {self.project_submission.last_name} - {self.image.name}"
