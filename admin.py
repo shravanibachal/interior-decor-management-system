@@ -1,11 +1,9 @@
 from django.contrib import admin
-from livingroom.models import Livingroom_Img1,Livingroom_Img2,Livingroom_Img3,Livingroom_Img4,Livingroom_Img5,Livingroom_Img6,Livingroom_Img7
+from residential.models import Residential_Img1,Residential_Img2,Residential_Img3,Residential_Img4,Residential_Img5
 
 # Register your models here.
-admin.site.register(Livingroom_Img1)
-admin.site.register(Livingroom_Img2)
-admin.site.register(Livingroom_Img3)
-admin.site.register(Livingroom_Img4)
-admin.site.register(Livingroom_Img5)
-admin.site.register(Livingroom_Img6)
-admin.site.register(Livingroom_Img7)
+admin.site.register(Residential_Img1)
+admin.site.register(Residential_Img2)
+admin.site.register(Residential_Img3)
+admin.site.register(Residential_Img4)
+admin.site.register(Residential_Img5)
